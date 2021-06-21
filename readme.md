@@ -133,3 +133,57 @@ The Spring PetClinic sample application is released under version 2.0 of the [Ap
 [spring-petclinic-graphql]: https://github.com/spring-petclinic/spring-petclinic-graphql
 [spring-petclinic-kotlin]: https://github.com/spring-petclinic/spring-petclinic-kotlin
 [spring-petclinic-rest]: https://github.com/spring-petclinic/spring-petclinic-rest
+
+
+# SPD - CI-CD pipeline with Jenkins, Artifactory , SonarQube , Kubernetes on Aamazon linux
+
+## T2Micro - Install Jenkins
+sudo yum -y update
+sudo systemctl reboot
+
+sudo amazon-linux-extras install -y java-openjdk11
+
+sudo tee /etc/yum.repos.d/jenkins.repo<<EOF
+[jenkins]
+name=Jenkins
+baseurl=http://pkg.jenkins.io/redhat
+gpgcheck=0
+EOF
+                                                                               
+sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+sudo yum repolist
+sudo yum install jenkins
+sudo systemctl start jenkins
+systemctl status jenkins
+systemctl is-enabled jenkins
+sudo ss -tunelp | grep 8080
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+                                            
+## Setup in Jenkins
+Install Git:
+sudo yum install -y git     -> Install git in jenkins server
+Install java :
+  wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u141-b15/336fa29ff2bb4ef291e347e091f7f4a7/jdk-8u141-linux-x64.rpm
+ sudo yum install -y jdk-8u141-linux-x64.rpm
+Install maven:
+ cd /tmp
+sudo wget https://www-eu.apache.org/dist/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.tar.gz
+sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt
+sudo ln -s /opt/apache-maven-3.8.1 /opt/maven
+
+Setup env vars:
+sudo tee /etc/profile.d/maven.sh<<EOF
+export JAVA_HOME=/usr/java/jdk1.8.0_141
+export M2_HOME=/opt/maven
+export MAVEN_HOME=/opt/maven
+export PATH=${M2_HOME}/bin:${PATH}
+EOF
+ 
+sudo chmod +x /etc/profile.d/maven.sh
+source /etc/profile.d/maven.sh
+sudo rm -f /tmp/apache-maven-3.8.1-bin.tar.gz
+
+ ## Setup Jenkins Global config to set java , git and maven
+ 
+ 
+                                            
